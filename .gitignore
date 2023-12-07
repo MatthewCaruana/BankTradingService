@@ -6,3 +6,6 @@
 /BankTradingService/.vs/BankTradingService
 /BankTradingService/obj
 /BankTradingService/bin/Debug/net6.0
+/BankTradingService.Consumer/bin/Debug/net6.0
+/BankTradingService.Consumer/obj
+/BankTradingService.Test/obj
