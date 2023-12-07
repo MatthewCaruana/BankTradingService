@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  banktradingservice:
+    image: ${DOCKER_REGISTRY-}banktradingservice
+    build:
+      context: .
+      dockerfile: BankTradingService/Dockerfile
+  banktradingservice-consumer:
+    image: ${DOCKER_REGISTRY-}banktradingserviceconsumer
+    build:
+      context: .
+      dockerfile: BankTradingService.Consumer/Dockerfile
