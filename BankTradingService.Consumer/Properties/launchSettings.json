@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BankTradingService.Consumer": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
