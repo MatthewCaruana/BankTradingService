@@ -13,3 +13,7 @@
 /BankTradingService.Test/bin/Debug/net6.0
 /bin/Debug
 /obj
+/BankTradingService.Application/obj
+/BankTradingService.Data/obj
+/BankTradingService.Application/bin/Debug/net6.0
+/BankTradingService.Data/bin/Debug/net6.0
