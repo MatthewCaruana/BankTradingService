@@ -21,6 +21,7 @@ namespace BankTradingService.Data.Mappings
             builder.Property(x => x.Email).HasColumnName("email");
 
             builder.HasMany(x => x.Trades).WithOne(x => x.User).HasForeignKey(x => x.UserID);
+            builder.ToTable("user");
         }
     }
 }

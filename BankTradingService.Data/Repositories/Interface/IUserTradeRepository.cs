@@ -9,6 +9,7 @@ namespace BankTradingService.Data.Repositories.Interface
 {
     public interface IUserTradeRepository
     {
-        UserDataModel? GetUserByID(int id);
+        bool CheckUserExistsWithID(int ID);
+        List<TradeDataModel> GetTradesForUser(int ID);
     }
 }

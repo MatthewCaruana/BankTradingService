@@ -26,6 +26,7 @@ namespace BankTradingService.Data.Mappings
             builder.Property(x => x.CloseTimestamp).HasColumnName("close_timestamp");
 
             builder.HasOne(x => x.User).WithMany(x => x.Trades).HasForeignKey(x => x.UserID);
+            builder.ToTable("trade");
         }
     }
 }

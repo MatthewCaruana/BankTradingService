@@ -18,9 +18,20 @@ namespace BankTradingService.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public UserDataModel? GetUserByID(int id)
+        public bool CheckUserExistsWithID(int id)
         {
-            return _dbContext.User.SingleOrDefault(x => x.Id == id);
+            UserDataModel? user = _dbContext.User.SingleOrDefault(x => x.Id == id);
+
+            if(user != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public List<TradeDataModel> GetTradesForUser(int ID)
+        {
+            return _dbContext.Trade.Where(x=>x.UserID == ID).ToList();
         }
     }
 }
