@@ -33,5 +33,10 @@ namespace BankTradingService.Data.Repositories
         {
             return _dbContext.Trade.Where(x=>x.UserID == ID).ToList();
         }
+
+        public async Task OpenTrade(TradeDataModel trade)
+        {
+            await _dbContext.Trade.AddAsync(trade);
+        }
     }
 }

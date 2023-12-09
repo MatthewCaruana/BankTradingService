@@ -11,5 +11,6 @@ namespace BankTradingService.Data.Repositories.Interface
     {
         bool CheckUserExistsWithID(int ID);
         List<TradeDataModel> GetTradesForUser(int ID);
+        Task OpenTrade(TradeDataModel trade);
     }
 }
