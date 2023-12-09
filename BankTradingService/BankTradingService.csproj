@@ -15,4 +15,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BankTradingService.Application\BankTradingService.Application.csproj" />
+    <ProjectReference Include="..\BankTradingService.Data\BankTradingService.Data.csproj" />
+  </ItemGroup>
+
 </Project>
