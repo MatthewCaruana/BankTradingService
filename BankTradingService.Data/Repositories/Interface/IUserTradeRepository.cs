@@ -12,5 +12,7 @@ namespace BankTradingService.Data.Repositories.Interface
         bool CheckUserExistsWithID(int ID);
         List<TradeDataModel> GetTradesForUser(int ID);
         Task OpenTrade(TradeDataModel trade);
+        Task<TradeDataModel?> GetTradeByID(int ID);
+        void CloseTrade(int ID, decimal CloseAmount);
     }
 }

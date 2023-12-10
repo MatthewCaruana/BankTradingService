@@ -14,8 +14,5 @@ namespace BankTradingService.Application.DTOs
         public TransactionTypes TransactionType { get; set; }
         public decimal Amount { get; set; }
         public decimal OpenPrice { get; set; }
-        public DateTime OpenTimestamp { get; set; }
-        public decimal? ClosePrice { get; set; }
-        public DateTime? CloseTimestamp { get; set; }
     }
 }

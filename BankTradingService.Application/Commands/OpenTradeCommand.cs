@@ -46,6 +46,10 @@ namespace BankTradingService.Application.Commands
                     _logger.LogInformation($"Trade successfully opened, id: {dataModel.Id}");
                     result.Id = dataModel.Id;
                 }
+                else
+                {
+                    _logger.LogInformation("User was not found, no trades were opened");
+                }
 
                 return result;
             }
@@ -59,7 +63,7 @@ namespace BankTradingService.Application.Commands
                     Symbol = request.Symbol,
                     Amount = request.Amount,
                     OpenPrice = request.OpenPrice,
-                    OpenTimestamp = request.OpenTimestamp,
+                    OpenTimestamp = DateTime.Now,
                     ClosePrice = null,
                     CloseTimestamp = null
                 };

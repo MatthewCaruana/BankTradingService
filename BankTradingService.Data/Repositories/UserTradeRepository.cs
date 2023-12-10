@@ -1,6 +1,7 @@
 ﻿using BankTradingService.Data.Context.Interface;
 using BankTradingService.Data.Models;
 using BankTradingService.Data.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,20 @@ namespace BankTradingService.Data.Repositories
                 return true;
             }
             return false;
+        }
+
+        public void CloseTrade(int ID, decimal CloseAmount)
+        {
+            //If this is accessed, the trade exists.. no need to check if exists already
+            var trade = _dbContext.Trade.Single(x => x.Id == ID);
+
+            trade.ClosePrice = CloseAmount;
+            trade.CloseTimestamp = DateTime.Now;
+        }
+
+        public async Task<TradeDataModel?> GetTradeByID(int ID)
+        {
+            return await _dbContext.Trade.SingleOrDefaultAsync(x=>x.Id == ID);
         }
 
         public List<TradeDataModel> GetTradesForUser(int ID)

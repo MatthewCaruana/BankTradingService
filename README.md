@@ -11,3 +11,5 @@ During the development of this application I had made some assumptions:
 - Even though Mediatr is set up, I did not follow the CQRS methodology entirely mainly for simplicity reasons. In the ideal case, the reading and writing Database contexts are split to ensure that the reads are not affected by the writes and vice versa.
 - The Unit of Work is intended to possess the ability of setting a transaction based environment for when interfacing with the database. In this case, it is not required as the case is very specific.
 - A Domain Driven Design was initially planned for this solution, however, given the simplicity of this scenario, I did not fully apply the design approach.
+- Logging is to be written to console
+- The closing amount is provided through the API, however, it can be done by having a different service that calculates the actual amount for the current time. 

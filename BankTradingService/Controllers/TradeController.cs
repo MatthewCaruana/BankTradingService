@@ -26,13 +26,17 @@ namespace BankTradingService.Controllers
         }
 
         [HttpPost]
-        [Route("ExecuteTrade")]
-        public void ExecuteTrade([FromBody]TradeActivityDTO tradeActivity)
+        [Route("OpenTrade")]
+        public async Task<IActionResult> ExecuteTrade([FromBody]OpenTradeCommand request)
         {
-            if(ModelState.IsValid)
-            {
+            return Ok(await _mediator.Send(request));
+        }
 
-            }
+        [HttpPost]
+        [Route("CloseTrade")]
+        public async Task<IActionResult> CloseTrade([FromBody]CloseTradeCommand request)
+        {
+            return Ok(await _mediator.Send(request));
         }
     }
 }
