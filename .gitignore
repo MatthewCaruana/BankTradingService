@@ -19,3 +19,5 @@
 /BankTradingService.Data/bin/Debug/net6.0
 /BankTradingService.Shared/obj
 /BankTradingService.Shared/bin/Debug/net6.0
+/BankTradingService.Producer/bin/Debug/net6.0
+/BankTradingService.Producer/obj
