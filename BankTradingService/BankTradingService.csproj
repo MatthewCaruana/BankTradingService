@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BankTradingService.Application\BankTradingService.Application.csproj" />
     <ProjectReference Include="..\BankTradingService.Data\BankTradingService.Data.csproj" />
+    <ProjectReference Include="..\BankTradingService.Producer\BankTradingService.Producer.csproj" />
   </ItemGroup>
 
 </Project>

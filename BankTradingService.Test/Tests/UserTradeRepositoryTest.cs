@@ -45,8 +45,8 @@ namespace BankTradingService.Test.Tests
                 CallBase = true
             };
 
-            mockDbContext.Setup(x=>x.Trade).Returns(mockTradeDbSet.Object);
-            mockDbContext.Setup(x=>x.User).Returns(mockUserDbSet.Object);
+            mockDbContext.Setup(x => x.Trade).Returns(mockTradeDbSet.Object);
+            mockDbContext.Setup(x => x.User).Returns(mockUserDbSet.Object);
 
             _userTradeRepository = new UserTradeRepository(mockDbContext.Object);
         }
@@ -61,7 +61,7 @@ namespace BankTradingService.Test.Tests
             bool ActualExists = _userTradeRepository.CheckUserExistsWithID(Id);
 
             //assert
-            Assert.AreEqual(false, ActualExists);
+            Assert.That(ActualExists, Is.EqualTo(false));
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace BankTradingService.Test.Tests
             bool ActualExists = _userTradeRepository.CheckUserExistsWithID(Id);
 
             //assert
-            Assert.AreEqual(true, ActualExists);
+            Assert.That(ActualExists, Is.EqualTo(true));
         }
 
         [Test]
@@ -101,27 +101,76 @@ namespace BankTradingService.Test.Tests
 
             //assert
             Assert.IsNotNull(ActualTrade.Result);
-            Assert.That(_mockTradeData.Single(x=>x.Id == tradeId), Is.EqualTo(ActualTrade.Result));
+            Assert.That(ActualTrade.Result, Is.EqualTo(_mockTradeData.Single(x => x.Id == tradeId)));
         }
 
         [Test]
         public void When_Getting_Trades_For_User_That_Has_Not_Made_Trades_Return_Empty_List()
         {
             //arrange
+            int UserId = 3;
 
             //act
+            var ActualTrades = _userTradeRepository.GetTradesForUser(UserId);
 
             //assert
+            Assert.IsNotNull(ActualTrades);
+            Assert.AreEqual(0, ActualTrades.Count);
         }
 
         [Test]
         public void When_Getting_Trades_For_User_That_Has_Made_Trades_Return_List_With_Trades()
         {
             //arrange
+            int UserId = 1;
 
             //act
+            var ActualTrades = _userTradeRepository.GetTradesForUser(UserId);
 
             //assert
+            Assert.IsNotNull(ActualTrades);
+            Assert.That(ActualTrades, Is.EqualTo(_mockTradeData.Where(x => x.UserID == UserId).ToList()));
+        }
+
+        [Test]
+        public void When_Opening_A_Trade_A_New_Entry_Is_Created()
+        {
+            //arrange
+            TradeDataModel NewTrade = new TradeDataModel()
+            {
+                UserID = 3,
+                Amount = 1,
+                Symbol = "EURUSD",
+                TransactionType = 1,
+                OpenPrice = 1,
+                OpenTimestamp = DateTime.Now,
+            };
+
+            int countBefore = _mockTradeData.Count;
+
+            //act
+            _userTradeRepository.OpenTrade(NewTrade);
+
+            //assert
+            Assert.That(_mockTradeData.Count, Is.EqualTo(countBefore + 1));
+            Assert.IsTrue(_mockTradeData.Any(x => x.UserID == NewTrade.UserID && x.Symbol == NewTrade.Symbol));
+        }
+
+        [Test]
+        public void When_Closing_A_Trade_The_Values_Are_Updated()
+        {
+            //arrange
+            int TradeId = 3;
+            decimal ClosePrice = 50;
+
+            int countBefore = _mockTradeData.Count;
+
+            //act
+            _userTradeRepository.CloseTrade(TradeId, ClosePrice);
+
+            //assert
+            Assert.That(_mockTradeData.Count, Is.EqualTo(countBefore));
+            Assert.IsTrue(_mockTradeData.Any(x => x.Id == TradeId && x.ClosePrice == ClosePrice && x.CloseTimestamp == DateTime.Now));
         }
     }
 }

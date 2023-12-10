@@ -32,7 +32,7 @@ namespace BankTradingService.Data.Repositories
 
         public void CloseTrade(int ID, decimal CloseAmount)
         {
-            //If this is accessed, the trade exists.. no need to check if exists already
+            //If this area is accessed, the trade exists.. no need to check if exists already
             var trade = _dbContext.Trade.Single(x => x.Id == ID);
 
             trade.ClosePrice = CloseAmount;

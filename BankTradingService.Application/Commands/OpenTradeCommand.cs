@@ -1,5 +1,6 @@
 ﻿using BankTradingService.Application.DTOs;
 using BankTradingService.Data.Models;
+using BankTradingService.Producer.Kafka.Interface;
 using BankTradingService.Shared.Messaging;
 using BankTradingService.Shared.Utilities.Interface;
 using Microsoft.Extensions.Logging;
@@ -20,11 +21,13 @@ namespace BankTradingService.Application.Commands
         {
             private readonly IUnitOfWork _unitOfWork;
             private ILogger<OpenTradeCommandHandler> _logger;
+            private IMessageProducer _messageProducer;
 
-            public OpenTradeCommandHandler(IUnitOfWork unitOfWork, ILogger<OpenTradeCommandHandler> logger)
+            public OpenTradeCommandHandler(IUnitOfWork unitOfWork, ILogger<OpenTradeCommandHandler> logger, IMessageProducer messageProducer)
             {
                 _unitOfWork = unitOfWork;
                 _logger = logger;
+                _messageProducer = messageProducer;
             }
 
             public async Task<NewTradeActivityResponseDTO> Handle(OpenTradeCommand request, CancellationToken cancellationToken)
@@ -44,6 +47,8 @@ namespace BankTradingService.Application.Commands
 
                     _unitOfWork.SaveChanges();
                     _logger.LogInformation($"Trade successfully opened, id: {dataModel.Id}");
+
+                    await _messageProducer.CreateOpenTradeMessage(dataModel);
                     result.Id = dataModel.Id;
                 }
                 else

@@ -7,7 +7,7 @@ class Program
         // Setup Consumer using Kafka and subscribe to publishing service
         ConsumerConfig config = new ConsumerConfig
         {
-            BootstrapServers = "localhost:9092",
+            BootstrapServers = "kafka:29092",
             AutoOffsetReset = AutoOffsetReset.Earliest,
             ClientId = "BankTradingServiceClient",
             GroupId = "BankTradingServiceGroup",

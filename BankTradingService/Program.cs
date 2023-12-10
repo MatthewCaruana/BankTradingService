@@ -11,6 +11,8 @@ using BankTradingService.Shared.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using System.Reflection;
+using BankTradingService.Producer.Kafka.Interface;
+using BankTradingService.Producer.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,7 @@ builder.Services.AddLogging();
 builder.Services.AddSingleton<ILoggerFactory, LoggerFactory>();
 builder.Services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 
+builder.Services.AddSingleton<IMessageProducer, MessageProducer>();
 
 builder.Services.AddDbContext<TradeDbContext>();
 

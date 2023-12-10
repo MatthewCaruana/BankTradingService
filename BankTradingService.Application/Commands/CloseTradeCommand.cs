@@ -1,5 +1,6 @@
 ﻿using BankTradingService.Application.DTOs;
 using BankTradingService.Data.Models;
+using BankTradingService.Producer.Kafka.Interface;
 using BankTradingService.Shared.Messaging;
 using BankTradingService.Shared.Utilities.Interface;
 using Microsoft.Extensions.Logging;
@@ -17,11 +18,13 @@ namespace BankTradingService.Application.Commands
         {
             private readonly IUnitOfWork _unitOfWork;
             private ILogger<CloseTradeCommandHandler> _logger;
+            private IMessageProducer _messageProducer;
 
-            public CloseTradeCommandHandler(IUnitOfWork unitOfWork, ILogger<CloseTradeCommandHandler> logger)
+            public CloseTradeCommandHandler(IUnitOfWork unitOfWork, ILogger<CloseTradeCommandHandler> logger, IMessageProducer messageProducer)
             {
                 _logger = logger;
                 _unitOfWork = unitOfWork;
+                _messageProducer = messageProducer;
             }
 
             public async Task<CloseTradeResponseDTO> Handle(CloseTradeCommand request, CancellationToken cancellationToken)
@@ -39,6 +42,7 @@ namespace BankTradingService.Application.Commands
                     _unitOfWork.SaveChanges();
                     _logger.LogInformation("Trade successfully closed");
 
+                    _messageProducer.CreateClosedTradeMessage(trade).Wait();
                     result.TradeID = request.TradeID;
                 }
                 else

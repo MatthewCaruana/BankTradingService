@@ -67,7 +67,7 @@ namespace BankTradingService.Test.Mocks
                 },
                 new TradeDataModel()
                 {
-                    Id = 1,
+                    Id = 3,
                     Symbol = "GBPJPY",
                     Amount = 20,
                     TransactionType = 0,
