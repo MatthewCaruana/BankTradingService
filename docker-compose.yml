@@ -17,5 +17,9 @@ services:
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "Str0ngPa$w0rd"
+      SA_PASSWORD: "Str0ngPa"
       ACCEPT_EULA: "Y"
+    volumes:
+      - my-datavolume:/var/opt/mssql
+volumes:
+  my-datavolume:
