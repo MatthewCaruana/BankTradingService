@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BankTradingService.Test.Tests
+namespace BankTradingService.Test.Tests.Repositories
 {
     [TestFixture]
     public class UserTradeRepositoryTest

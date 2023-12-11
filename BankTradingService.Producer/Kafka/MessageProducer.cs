@@ -26,6 +26,11 @@ namespace BankTradingService.Producer.Kafka
             producer = new ProducerBuilder<Null, string>(config).Build();
         }
 
+        /// <summary>
+        /// Produces message onto message queue with new trade information
+        /// </summary>
+        /// <param name="trade"></param>
+        /// <returns></returns>
         public async Task CreateOpenTradeMessage(TradeDataModel trade)
         {
             var message = new Message<Null, string>
@@ -37,6 +42,11 @@ namespace BankTradingService.Producer.Kafka
             Console.WriteLine($"Event sent on Partition: {result.Partition} with Offset: {result.Offset}");
         }
 
+        /// <summary>
+        /// Produces message onto message queue with closed trade information
+        /// </summary>
+        /// <param name="trade"></param>
+        /// <returns></returns>
         public async Task CreateClosedTradeMessage(TradeDataModel trade)
         {
             var message = new Message<Null, string>
