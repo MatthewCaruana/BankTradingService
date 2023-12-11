@@ -12,6 +12,8 @@ using static BankTradingService.Application.Commands.GetUserTradesQueryCommand;
 
 namespace BankTradingService.Test.Tests.Commands
 {
+    //These test are more targetted towards testing the behaviour of the GetUserTradesQueryCommandHandler
+
     [TestFixture]
     public class GetUserTradesQueryCommandTest
     {

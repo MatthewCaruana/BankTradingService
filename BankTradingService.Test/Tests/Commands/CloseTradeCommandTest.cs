@@ -14,6 +14,7 @@ using static BankTradingService.Application.Commands.CloseTradeCommand;
 
 namespace BankTradingService.Test.Tests.Commands
 {
+    //These test are more targetted towards testing the behaviour of the CloseTradeCommandHandler
     [TestFixture]
     public class CloseTradeCommandTest
     {

@@ -14,6 +14,7 @@ using static BankTradingService.Application.Commands.OpenTradeCommand;
 
 namespace BankTradingService.Test.Tests.Commands
 {
+    //These test are more targetted towards testing the behaviour of the OpenTradeCommandHandler
     [TestFixture]
     public class OpenTradeCommandTest
     {
