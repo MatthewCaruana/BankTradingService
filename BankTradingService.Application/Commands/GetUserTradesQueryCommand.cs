@@ -30,17 +30,24 @@ namespace BankTradingService.Application.Commands
             public async Task<IEnumerable<TradeActivityDTO>> Handle(GetUserTradesQueryCommand request, CancellationToken cancellationToken)
             {
                 List<TradeActivityDTO> result = new List<TradeActivityDTO>();
+                _logger.LogInformation($"Checking if user with UserID: {request.UserID} exists");
 
                 bool userExists = _userTradeRepository.CheckUserExistsWithID(request.UserID);
 
                 if (userExists)
                 {
+                    _logger.LogInformation("User found, retrieving trades for user");
                     var trades = _userTradeRepository.GetTradesForUser(request.UserID);
 
                     foreach(var trade in trades)
                     {
                         result.Add(Convert(trade));
                     }
+                    _logger.LogInformation($"Successfully retrieved {result.Count} trades");
+                }
+                else
+                {
+                    _logger.LogInformation("User not found, could not retrieve trades");
                 }
 
                 return result;
