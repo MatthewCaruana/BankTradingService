@@ -78,5 +78,10 @@ namespace BankTradingService.Data.Repositories
         {
             await _dbContext.Trade.AddAsync(trade);
         }
+
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
+        }
     }
 }

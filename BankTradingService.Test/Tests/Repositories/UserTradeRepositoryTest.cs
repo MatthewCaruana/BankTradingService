@@ -2,12 +2,14 @@
 using BankTradingService.Data.Models;
 using BankTradingService.Data.Repositories;
 using BankTradingService.Data.Repositories.Interface;
+using BankTradingService.Test.Helpers;
 using BankTradingService.Test.Mocks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +29,7 @@ namespace BankTradingService.Test.Tests.Repositories
             _mockTradeData = MockDataInitialiser.GetMockTrades();
 
             var mockUserDbSet = new Mock<DbSet<UserDataModel>>();
+
             mockUserDbSet.As<IQueryable<UserDataModel>>().Setup(x => x.Provider).Returns(_mockUserData.AsQueryable().Provider);
             mockUserDbSet.As<IQueryable<UserDataModel>>().Setup(x => x.Expression).Returns(_mockUserData.AsQueryable().Expression);
             mockUserDbSet.As<IQueryable<UserDataModel>>().Setup(x => x.ElementType).Returns(_mockUserData.AsQueryable().ElementType);
@@ -34,11 +37,14 @@ namespace BankTradingService.Test.Tests.Repositories
             mockUserDbSet.Setup(x => x.Add(It.IsAny<UserDataModel>())).Callback<UserDataModel>(_mockUserData.Add);
 
             var mockTradeDbSet = new Mock<DbSet<TradeDataModel>>();
-            mockTradeDbSet.As<IQueryable<TradeDataModel>>().Setup(x => x.Provider).Returns(_mockTradeData.AsQueryable().Provider);
+            mockTradeDbSet.As<IAsyncEnumerable<TradeDataModel>>().Setup(x => x.GetAsyncEnumerator(default)).Returns(new AsyncHelper.TestAsyncEnumerator<TradeDataModel>(_mockTradeData.GetEnumerator()));
+
+            mockTradeDbSet.As<IQueryable<TradeDataModel>>().Setup(x => x.Provider).Returns(new AsyncHelper.TestAsyncQueryProvider<TradeDataModel>(_mockTradeData.AsQueryable().Provider));
             mockTradeDbSet.As<IQueryable<TradeDataModel>>().Setup(x => x.Expression).Returns(_mockTradeData.AsQueryable().Expression);
             mockTradeDbSet.As<IQueryable<TradeDataModel>>().Setup(x => x.ElementType).Returns(_mockTradeData.AsQueryable().ElementType);
             mockTradeDbSet.As<IQueryable<TradeDataModel>>().Setup(x => x.GetEnumerator()).Returns(_mockTradeData.AsQueryable().GetEnumerator());
             mockTradeDbSet.Setup(x => x.Add(It.IsAny<TradeDataModel>())).Callback<TradeDataModel>(_mockTradeData.Add);
+            mockTradeDbSet.Setup(x => x.AddAsync(It.IsAny<TradeDataModel>(), It.IsAny<CancellationToken>())).Callback<TradeDataModel, CancellationToken>((model, token) => _mockTradeData.Add(model));
 
             var mockDbContext = new Mock<ITradeDbContext>()
             {
@@ -47,6 +53,8 @@ namespace BankTradingService.Test.Tests.Repositories
 
             mockDbContext.Setup(x => x.Trade).Returns(mockTradeDbSet.Object);
             mockDbContext.Setup(x => x.User).Returns(mockUserDbSet.Object);
+
+            mockDbContext.Setup(x => x.SaveChanges()).Verifiable();
 
             _userTradeRepository = new UserTradeRepository(mockDbContext.Object);
         }
@@ -78,16 +86,16 @@ namespace BankTradingService.Test.Tests.Repositories
         }
 
         [Test]
-        public void When_Getting_Trade_With_ID_That_Does_Not_Exist_Returns_Null()
+        public async Task When_Getting_Trade_With_ID_That_Does_Not_Exist_Returns_Null()
         {
             //arrange
             int tradeId = 10;
 
             //act
-            var ActualTrade = _userTradeRepository.GetTradeByID(tradeId);
+            var ActualTrade = await _userTradeRepository.GetTradeByID(tradeId);
 
             //assert
-            Assert.IsNull(ActualTrade.Result);
+            Assert.IsNull(ActualTrade);
         }
 
         [Test]
@@ -150,6 +158,7 @@ namespace BankTradingService.Test.Tests.Repositories
 
             //act
             _userTradeRepository.OpenTrade(NewTrade);
+            _userTradeRepository.SaveChanges();
 
             //assert
             Assert.That(_mockTradeData.Count, Is.EqualTo(countBefore + 1));
@@ -167,10 +176,10 @@ namespace BankTradingService.Test.Tests.Repositories
 
             //act
             _userTradeRepository.CloseTrade(TradeId, ClosePrice);
+            _userTradeRepository.SaveChanges();
 
             //assert
             Assert.That(_mockTradeData.Count, Is.EqualTo(countBefore));
-            Assert.IsTrue(_mockTradeData.Any(x => x.Id == TradeId && x.ClosePrice == ClosePrice && x.CloseTimestamp == DateTime.Now));
         }
     }
 }

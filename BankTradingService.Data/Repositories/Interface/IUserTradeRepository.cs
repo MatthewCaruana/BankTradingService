@@ -14,5 +14,6 @@ namespace BankTradingService.Data.Repositories.Interface
         Task OpenTrade(TradeDataModel trade);
         Task<TradeDataModel?> GetTradeByID(int ID);
         void CloseTrade(int ID, decimal CloseAmount);
+        void SaveChanges();
     }
 }
